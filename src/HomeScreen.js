@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthhContext } from "./AuthhContext";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import MasterItem from "./components/MasterItem";
 import MasterItemDelete from "./components/MasterItemDelete";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -124,8 +124,16 @@ export default function HomeScreen({navigation}) {
           <Text>No data</Text>
         }
 
-        <AppButton title="Logout" onPress={() => {
-            logout();
-        }} />
+        <View style={styles.logoutBtn}>
+            <AppButton title="Logout" onPress={() => {
+                logout();
+            }} />
+        </View>
     </Screen>);
 }
+const styles = StyleSheet.create({
+    logoutBtn: {
+        justifyContent: "center",
+        alignItems: "center",
+    }
+})

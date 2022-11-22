@@ -112,10 +112,12 @@ export default function MasterDetailScreen({route}){
           /> :
           <Text>No data</Text>
         }
-        <AppButton title='Make Master' onPress={()=> {
-            alert(`${mFirstName} ${mLastName} ${mId} set as master`)
-            SetCurrentMaster(mFirstName+' '+mLastName)
-        }}/>
+        <View style={styles.makeMaster}>
+            <AppButton title='Make Master' onPress={()=> {
+                alert(`${mFirstName} ${mLastName} ${mId} set as master`)
+                SetCurrentMaster(mFirstName+' '+mLastName)
+            }}/>
+        </View>
     </Screen>)
 }
 const styles = StyleSheet.create({
@@ -160,5 +162,9 @@ const styles = StyleSheet.create({
     },
     icon: {
         flex: 1,
+    },
+    makeMaster: {
+        justifyContent: "center",
+        alignItems: "center",
     }
 })
