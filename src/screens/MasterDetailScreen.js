@@ -9,11 +9,12 @@ import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
 import colors from '../config/colors'
 import { BASE_URL } from "../config/config";
+import OwnerCard from "../components/OwnerCard";
 
 export default function MasterDetailScreen({route}){
     const { userInfo } = useContext(AuthhContext);
-    const [master, setMaster] = useState([])
-    const {mFirstName, mLastName, mId, mFav, ...mPets/*.., ..,*/} = route.params
+    const [masters, setMasters] = useState([])
+    const {mFirstN, mLastN, mId, mFav, ...mPets/*.., ..,*/} = route.params
 
     const [currentMaster, setCurrentMaster] = useState('')
 
@@ -34,76 +35,56 @@ export default function MasterDetailScreen({route}){
 
     async function getData() {
         try {
-            fetchAPI().then(listOfMaster => {
-                console.log(listOfMaster);
-                setMaster(listOfMaster.pets);
+            fetchAPI().then(list => {
+                console.log(list);
+                setMasters(list.pets);
             });
         } catch (e) {
 
         }
     }
 
-    const getCurrentMaster = async () => {
+    const LoadCurrentMaster = async () => {
         setCurrentMaster(await AsyncStorage.getItem(CURRENT_MASTER))
     }
-    const SetCurrentMaster = async (m)=> {
+    const SaveCurrentMaster = async (m)=> {
         setCurrentMaster(await AsyncStorage.setItem(CURRENT_MASTER, m))
-        if (mFirstName !== null && mLastName !== null) {
-            await AsyncStorage.setItem('first', mFirstName)
-            await AsyncStorage.setItem('last', mLastName)
+        if (mFirstN !== null && mLastN !== null) {
+            await AsyncStorage.setItem('first', mFirstN)
+            await AsyncStorage.setItem('last', mLastN)
         }
     }
 
     useEffect(() => {
         getData()
 
-        getCurrentMaster()
+        LoadCurrentMaster()
     }, [])
 
     return(<Screen>
-        {currentMaster ?
-          <Text>Master: {currentMaster}</Text> :
-          <Text>No master selected yet</Text>
+        {
+            // currentMaster ? <Text>Master: {route.params.cm}</Text> :
+              // <Text>Master: {currentMaster}</Text> :
+              // <Text>Reload app</Text>
         }
-        <Text style={{
-            marginBottom: 10,
-            marginStart: 20,
-            fontWeight: 'bold',
-            color: '#b2afaf',
-        }}>Owner Card</Text>
-        <View style={styles.master}>
-            <View style={styles.masterCircle}>
-                <Text style={{color:colors.white}}>{mFirstName.toString().substring(0,1)}{mLastName.toString().substring(0,1)}</Text>
-            </View>
-            <View style={styles.firstAndLastNameStyle}>
-                <Text>First Name</Text>
-                <Text>{mFirstName}</Text>
-                <Text>Last Name</Text>
-                <Text>{mLastName}</Text>
-            </View>
-            <View style={styles.icon}>
-                <MaterialCommunityIcons
-                  name='star'
-                  size={24}
-                  color={mFav ? colors.greenc : colors.white1}
-                />
-            </View>
-        </View>
-        <Text style={{
-            marginTop: 20,
-            marginBottom: 10,
-            marginStart: 20,
-            fontWeight: 'bold',
-            color: '#b2afaf',
-        }}>Cats</Text>
-        {master ?
+
+        <Text style={styles.label}>Owner Card</Text>
+        <OwnerCard mFirstN={mFirstN} mLastN={mLastN}/>
+
+        {
+            mPets ?
+              <Text style={styles.label}>Cats</Text> :
+              <Text style={styles.label}>This owner has no cat</Text>
+        }
+
+        {masters ?
           <FlatList
-            data={master}
+            data={masters}
             renderItem={({ item }) =>
               <PetItem
-                onPress={() => {
-                    console.log(`Item: ${item.masterId}`)
-                }}
+                // onPress={() => {
+                //     console.log(`Item: ${item.masterId}`)
+                // }}
                 name={item.name}
                 dob={item.dob}
                 Category={item.Category}
@@ -114,38 +95,14 @@ export default function MasterDetailScreen({route}){
         }
         <View style={styles.makeMaster}>
             <AppButton title='Make Master' onPress={()=> {
-                alert(`${mFirstName} ${mLastName} ${mId} set as master`)
-                SetCurrentMaster(mFirstName+' '+mLastName)
+                alert(`${mFirstN} ${mLastN} with id ${mId} set as master`)
+                SaveCurrentMaster(mFirstN.toString().substring(0, 1) + mLastN.toString().substring(0, 1))
             }}/>
         </View>
     </Screen>)
 }
+
 const styles = StyleSheet.create({
-    master: {
-        flexDirection: 'row',
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingStart: 8,
-        paddingEnd: 8,
-        backgroundColor: colors.white,
-        borderRadius: 12,
-        marginBottom: 10,
-        marginStart: 20,
-        marginEnd: 20,
-        elevation: 5,
-        height: 100,
-        justifyContent: "space-between",
-        alignItems: "center"
-    },
-    masterCircle: {
-        backgroundColor: "#6f6c6c",
-        width: 36,
-        height: 36,
-        borderRadius: 36/2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginEnd: 20
-    },
     currentMasterCircle: {
         backgroundColor: colors.white,
         width: 36,
@@ -156,12 +113,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginEnd: 20
     },
-    firstAndLastNameStyle: {
-        flex: 2,
-        flexDirection: 'column'
-    },
-    icon: {
-        flex: 1,
+    label : {
+        marginTop: 20,
+        marginBottom: 10,
+        marginStart: 20,
+        fontWeight: 'bold',
+        color: '#b2afaf',
     },
     makeMaster: {
         justifyContent: "center",

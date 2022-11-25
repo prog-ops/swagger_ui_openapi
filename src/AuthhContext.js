@@ -9,6 +9,7 @@ export const AuthhProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [userToken, setUserToken] = useState(null);
     const [userInfo, setUserInfo] = useState(null)//res.data
+
     const login = (username, password) => {
         setIsLoading(true);
 
@@ -22,12 +23,13 @@ export const AuthhProvider = ({ children }) => {
               AsyncStorage.setItem('userinfo', JSON.stringify(usrInfo))
               AsyncStorage.setItem('usertoken', usrInfo.token)
 
-              console.log(usrInfo.token)
+              //v console.log(usrInfo.token)
           })
           .catch(e => console.log(`Login error ${e}`));
 
         setIsLoading(false);
     };
+
     const logout = () => {
         setIsLoading(true);
         setUserToken(null);
@@ -35,6 +37,7 @@ export const AuthhProvider = ({ children }) => {
         AsyncStorage.removeItem("usertoken");
         setIsLoading(false);
     };
+
     const isLoggedIn = async () => {
         try {
             setIsLoading(true);

@@ -3,9 +3,9 @@ import colors from "../config/colors";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function ScreenMasterTitle({ tl }) {
-    const firstName = AsyncStorage.getItem('first')
-    const lastName = AsyncStorage.getItem('last')
+export default function ScreenMasterTitle({ initialInCircle, firstN, lastN }) {
+    // const firstName = AsyncStorage.getItem('first')
+    // const lastName = AsyncStorage.getItem('last')
 
     useEffect(() => {
 
@@ -14,12 +14,13 @@ export default function ScreenMasterTitle({ tl }) {
     return (
       <View style={styles.container}>
           <View style={styles.currentMasterCircle}>
-              <Text style={{ color: colors.greenc }}>{tl}</Text>
+              <Text style={styles.textInCircle}>{initialInCircle}</Text>
           </View>
-          <Text style={{ color: colors.black }}>Master: {tl}</Text>
+          <Text style={styles.textBeside}>Master: {firstN} {lastN}</Text>
       </View>
     );
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -37,4 +38,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginEnd: 20,
     },
+    textInCircle: {
+        fontSize: 18,
+        color: colors.greenc
+    },
+    textBeside: {
+        fontSize: 18,
+        color: colors.black,
+        fontWeight: 'bold'
+    }
 });

@@ -7,8 +7,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Screen from "./components/Screen";
 import AppButton from "./components/AppButton";
 import { BASE_URL } from "./config/config";
+import colors from "./config/colors";
+import { CURRENT_MASTER } from "./consts";
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen({navigation, route}) {
     const { logout } = useContext(AuthhContext);
     const { userInfo } = useContext(AuthhContext);
     const [masters, setMasters] = useState([])
@@ -33,7 +35,7 @@ export default function HomeScreen({navigation}) {
     async function getMaster() {
         try {
             beforegetMaster().then(data => {
-                console.log(data);
+                //v console.log(data);
                 setMasters(data);
             });
         } catch (e) {}
@@ -51,8 +53,8 @@ export default function HomeScreen({navigation}) {
           .then(data => setMasterById(data))
     }
 
-    // Post a master example
-    const save = () => {
+    //v Post a master example
+    /*const save = () => {
         var mheaders = new Headers();
         mheaders.append("Authorization", "Bearer " + userInfo.token);
         mheaders.append("Content-Type", "application/json");
@@ -71,7 +73,7 @@ export default function HomeScreen({navigation}) {
           })
           .then((result) => console.log(result))
           .catch((e) => console.log(e));
-    };
+    };*/
 
 
     const deleteItem = (item) => {
@@ -82,20 +84,28 @@ export default function HomeScreen({navigation}) {
         );
     };
 
-    const getCurrentMaster = async () => {
-        setCurrentMaster(await AsyncStorage.getItem('currentMaster'))
+    const LoadCurrentMaster = async () => {
+        setCurrentMaster(await AsyncStorage.getItem(CURRENT_MASTER))
     }
 
     useEffect(() => {
-        getCurrentMaster()
+        LoadCurrentMaster()
 
         getMaster()
     }, [])
 
     return (<Screen>
         <View>
-            <Text>Master: {currentMaster ? currentMaster : ''}</Text>
+            <Text>Master (should be navbar): {currentMaster ? currentMaster : ''}</Text>
         </View>
+        <Text style={{
+            justifyContent: "center",
+            alignItems: "center",
+            marginStart: 20,
+            marginBottom: 20,
+            fontWeight: 'bold',
+            color: colors.grey1
+        }}>Owners List</Text>
         {masters ?
           <FlatList
             data={masters}
@@ -104,11 +114,12 @@ export default function HomeScreen({navigation}) {
                 onPress={() => {
                     console.log(`Item: ${item.firstName}`)
                     navigation.navigate('MasterDetail', {
-                        mFirstName: item.firstName,
-                        mLastName: item.lastName,
                         mId: item.id,
+                        mFirstN: item.firstName,
+                        mLastN: item.lastName,
                         mFav: item.favorites,
-                        mPets: item.pets
+                        mPets: item.pets,
+                        cm: currentMaster,
                     })
 
                     GetMasterById(item.id)

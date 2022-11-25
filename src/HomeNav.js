@@ -12,14 +12,23 @@ const HomeNav = () => (
         component={HomeScreen}
         options={({ route }) => ({
             tabBarIcon: () => <MaterialCommunityIcons name="home" size={20} />,
-            headerTitle: (p) => <ScreenMasterTitle {...p} />,
+            headerTitle: (p) =>
+              <ScreenMasterTitle
+                {...p}
+              />,
             headerTitleAlign: "center",
         })} />
       <Stack.Screen
         name="MasterDetail"
         component={MasterDetailScreen}
         options={({ route }) => ({
-            headerTitle: (p) => <ScreenMasterTitle {...p} tl={route.params.mFirstName} />,
+            headerTitle: (p) =>
+              <ScreenMasterTitle
+                {...p}
+                initialInCircle={route.params.cm}
+                firstN={route.params.mFirstN}
+                lastN={route.params.mLastN}
+              />,
             headerTitleAlign: "center",
         })}
       />
