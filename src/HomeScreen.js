@@ -6,6 +6,7 @@ import MasterItemDelete from "./components/MasterItemDelete";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Screen from "./components/Screen";
 import AppButton from "./components/AppButton";
+import { BASE_URL } from "./config/config";
 
 export default function HomeScreen({navigation}) {
     const { logout } = useContext(AuthhContext);
